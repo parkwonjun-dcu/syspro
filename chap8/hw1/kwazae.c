@@ -17,8 +17,7 @@ void PATH_Environ(const char *name) {
         printf("%s = %s\n", name, value);
     } else {
         printf("%s Error.\n", name);
-    }
-    exit(0);
+    }  
 }
 
 void UserPID() {
@@ -41,17 +40,17 @@ void MyPPID() {
 
 int main(int argc, char *argv[]) {
     int opt;
+	printf("-e, -e경로(ex) -ePATH), o-i, -p 등등...  -e PATH 띄어쓰면 안됨 \n");
     while ((opt = getopt(argc, argv, "e::ugip")) != -1) {
         switch (opt) {
             case 'e':
-				  if (strcmp(optarg, "PATH") == 0) {
-                    PATH_Environ("PATH");
-					break;
-                } else {
-                    All_Environ();
-					break;
-                }
-            
+				 if (optarg) {
+                 	PATH_Environ(optarg);
+           	  	 }	 
+				 else {
+                 	All_Environ();
+                 }
+				break;
 			case 'u':
                 UserPID();
                 break;
@@ -72,4 +71,5 @@ int main(int argc, char *argv[]) {
 	
     return 0;
 }
+
 
