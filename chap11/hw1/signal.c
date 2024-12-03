@@ -1,41 +1,37 @@
 #include <stdio.h>
-#include <unistd.h>
 #include <signal.h>
+#include <unistd.h>
 #include <stdlib.h>
 
-struct sigaction newact;
-struct sigaction oldact;
-void sigint_handler(int signo); 
-void alarmHandler();
+void alarmHandler(int signo);
+struct sigaction action;
 
-int main( void)
-{
-     newact.sa_handler = sigint_handler;  
-	 sigfillset(&newact.sa_mask);
-	 sigaction(SIGINT, &newact, &oldact);
+void my_signal(int signum, void (*handler)(int)) {
+    action.sa_handler = handler;
+    sigemptyset(&action.sa_mask);
+    action.sa_flags = 0;
 
-	while (1) {
-      printf("Type Ctrl-C!\n");
-	  sleep(1);
+    if (sigaction(signum, &action, NULL) == -1) {
+        perror("sigaction");
+        exit(1);
     }
 }
 
-void sigint_handler(int signo)
-{
-  signal(SIGALRM, alarmHandler);
-  alarm(5);    
-  short i = 0;
-  while (1) {
-    sleep(1);
-    i++;
-    printf("%d second\n", i);
-  }
-  printf("end\n");
-  sigaction(SIGINT, &oldact, NULL);
+int main() {
+    my_signal(SIGALRM, alarmHandler);
+    alarm(5);  
+
+    short i = 0;
+    while (1) {
+        sleep(1);
+        i++;
+        printf("%d second\n", i);
+    }
+    printf("end\n");
 }
 
-void alarmHandler(int signo)
-{
-   printf("Wake up\n");
-   exit(0);
+void alarmHandler(int signo) {
+    printf("Wake up\n");
+    exit(0);
 }
+

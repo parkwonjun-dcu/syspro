@@ -2,6 +2,15 @@
 #include <unistd.h>
 #include <signal.h>
 
+/* -> signal.h
+struct sigaction {
+	void (*sa_handler)(int);       	
+	void (*sa_sigaction)(int, siginfo_t *, void *); 
+	sigset_t sa_mask; 		
+	int sa_flags; 
+}
+*/
+
 struct sigaction newact;
 struct sigaction oldact;
 

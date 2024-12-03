@@ -50,16 +50,21 @@
   int main() {
       struct Queue* queue = createQueue();
       int data;
+		char input[10]; 
+  		while (1) {
+		//printf("정수를 입력하거나 'x'를 입력하여 종료: ");
+        scanf("%s", input);
+
+        if (strcmp(input, "x") == 0) {
+            break;
+        }
+
+
+        data = atoi(input);
+        addq(queue, data);
+    }
  
-      while (1) {
- 
-          scanf("%d", &data);
-          if (data == 'x') {
-              break;
-          }
-          addq(queue, data);
-      }
- 
+	  printf("Print Queue\n");
       while (queue->head != NULL) {
           data = delete(queue);
           printf("%d\n", data);
